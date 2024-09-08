@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Biblioteca Virtual</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="img/mulher-livro-cabeça.jpg" type="image/x-icon">
+</head>
+<body>
+    <header class="header">
+        <nav class="navbar">
+            <button class="nav-button">Home</button>
+            <button class="nav-button">Categoria</button>
+            <button class="nav-button" onclick="window.open('https://forms.gle/xExcP9HU8SpGUEyk9', '_blank')">Quero compartilhar um livro.</button>
+            <div class="search-container">
+                <input type="search" id="searchInput" name="query" placeholder="Pesquisar...">
+                <button id="searchBtn" class="search-button">Buscar</button>
+            </div>
+        </nav>
+        <h1>CONHECIMENTO É PODER</h1>
+        <h2>A VERDADE LIBERTA</h2>
+        <p>
+            Esta é uma página sem fins lucrativos com<br> o intuito de compartilhar livros em pdf<br>
+            Siga nossa rede social e apoie o projeto!
+        </p>
+    </header>
+    <main>
+        <div class="book-grid" id="bookGrid">
+            <!-- Livros serão gerados aqui pelo JavaScript -->
+        </div>
+        <div class="pagination">
+            <button id="prevBtn" onclick="changePage(-1)">Anterior</button>
+            <span id="pageInfo"></span>
+            <button id="nextBtn" onclick="changePage(1)">Próximo</button>
+        </div>
+    </main>
+    <footer class="footer">
+        <p>
+            &copy; 2024 Catálago de livros.<br>
+        </p>
+        Siga nossa rede social!<br>
+        <a href="https://www.instagram.com/christiankoziel/" target="_blank">
+            <img class="instagram" src="img/instagram.png" alt="Instagram">
+        </a>
+        <a href="https://www.linkedin.com/in/christiankoziel" target="_blank">
+            <img class="instagram" src="img/linkedin.png" alt="linkedin">
+        </a>
+    </footer>
+    
+    <script>
+        const books = [
+            { title: "A ciência do Sucesso - Napoleon Hill", img: "img/A ciencia do sucesso.jpg", pdf: "livros/A ciência do sucesso - Napoleon Hill.pdf" },
+            { title: "A literatura como remédio - Dante Gallian", img: "img/A literatura como remédio_ Os clássicos e a saúde da alma (Portuguese Edition)_page-0001.jpg", pdf: "livros/A literatura como remédio - Dante Gallian.pdf" },
+            { title: "Aprendendo a aprender - Barbara Oakley", img: "img/aprendendo a aprender.jpg", pdf: "livros/Aprendendo a aprender Barbara Oakley.pdf" },
+            { title: "Como convencer alguém em 90 segundos - Nicholas Boothman", img: "img/Como convencer alguém em 90 segundos_page-0001.jpg", pdf: "livros/Como convencer alguém em 90 segundos - Nicholas Boothman.pdf" },
+            { title: "Como fazer amigos e influenciar pessoas - Dale Carnegie", img: "img/Como fazer amigos e influenciar pessoas (Coleção Dale Carnegie)_page-0001.jpg", pdf: "livros/Como fazer amigos e influenciar pessoas Dale Carnegie.pdf" },
+            { title: "Inteligência Emocional ❀ Daniel Goleman", img: "img/Inteligência Emocional ❀ Daniel Goleman_page-0001.jpg", pdf: "livros/Inteligência Emocional ❀ Daniel Goleman.pdf" },
+            { title: "Helena - Machado de Assis", img: "img/Helena_page-0001.jpg", pdf: "livros/Helena - Machado de Assis.pdf" }
+        ];
+
+        const booksPerPage = 6;
+        let currentPage = 1;
+        let filteredBooks = books; // Array para armazenar livros filtrados
+
+        function displayBooks() {
+            const bookGrid = document.getElementById('bookGrid');
+            bookGrid.innerHTML = ''; // Limpa a grade de livros
+
+            const start = (currentPage - 1) * booksPerPage;
+            const end = start + booksPerPage;
+            const paginatedBooks = filteredBooks.slice(start, end);
+
+            paginatedBooks.forEach(book => {
+                const bookDiv = document.createElement('div');
+                bookDiv.className = 'book';
+                bookDiv.innerHTML = `
+                    <img src="${book.img}" alt="Imagem do livro">
+                    <h2>${book.title}</h2>
+                    <p>Descrição do livro...</p>
+                    <a href="${book.pdf}" download>
+                        <button>Baixar livro</button>
+                    </a>
+                `;
+                bookGrid.appendChild(bookDiv);
+            });
+
+            document.getElementById('pageInfo').innerText = `Página ${currentPage} de ${Math.ceil(filteredBooks.length / booksPerPage)}`;
+            document.getElementById('prevBtn').disabled = currentPage === 1;
+            document.getElementById('nextBtn').disabled = currentPage === Math.ceil(filteredBooks.length / booksPerPage);
+        }
+
+        function changePage(direction) {
+            currentPage += direction;
+            displayBooks();
+        }
+
+        function searchBooks() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            filteredBooks = books.filter(book => book.title.toLowerCase().includes(query));
+            currentPage = 1; // Resetar para a primeira página
+            displayBooks();
+        }
+
+        // Evento de clique no botão de busca
+        document.getElementById('searchBtn').onclick = searchBooks;
+
+        // Exibe os livros da primeira página ao carregar
+        displayBooks();
+    </script>
+</body>
+</html>
